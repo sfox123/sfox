@@ -289,6 +289,8 @@
       animation-play-state: running;
       background-color: transparent;
       color: #0c0c0c;
+      height: 200px; /* Match the line-height */
+      line-height: 200px; /* Ensure vertical alignment */
     }
 
     /* Add a delay to each letter's animation */
