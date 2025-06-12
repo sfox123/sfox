@@ -22,7 +22,7 @@ const About = (props) => {
             <div className="col-lg-6 col-md-12 col-12">
               <div className="tf-about-text">
                 <small>about Me</small>
-                <h2>Welcome to Tonu, Best Software Services</h2>
+                <h2>Crafting Digital Experiences, One Pixel at a Time</h2>
                 <h5>
                   I have 5+ years of experiences in Software Development &
                   Graphic Designing for give you better services.
