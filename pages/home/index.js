@@ -13,7 +13,7 @@ import BlogSection from '../../components/BlogSection/BlogSection';
 import Footer from '../../components/footer/Footer';
 import Pricing from '../../components/Pricing';
 
-const HomePage = () => {
+const HomePage = () => { 
     return (
         <Fragment>
             <Navbar />
