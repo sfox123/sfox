@@ -16,6 +16,7 @@ const ScrollVideo = () => {
       const offsetTop = rect.top + scrollTop;
       const maxScroll = rect.height - windowHeight;
       const progress = Math.min(Math.max((scrollTop - offsetTop) / maxScroll, 0), 1);
+
       if (video.duration) {
         video.currentTime = progress * video.duration;
       }
@@ -28,6 +29,7 @@ const ScrollVideo = () => {
 
     video.addEventListener("loadedmetadata", handleLoaded);
     window.addEventListener("scroll", handleScroll);
+
     return () => {
       video.removeEventListener("loadedmetadata", handleLoaded);
       window.removeEventListener("scroll", handleScroll);
