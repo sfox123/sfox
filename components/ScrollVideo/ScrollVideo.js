@@ -8,7 +8,8 @@ const ScrollVideo = () => {
     if (!video) return;
     const handleScroll = () => {
       const rect = video.getBoundingClientRect();
-      const windowHeight = window.innerHeight || document.documentElement.clientHeight;
+      const windowHeight =
+        window.innerHeight || document.documentElement.clientHeight;
       const scrollTop = window.scrollY || window.pageYOffset;
       const offsetTop = rect.top + scrollTop;
       const totalScroll = rect.height + windowHeight;
@@ -49,6 +50,7 @@ const ScrollVideo = () => {
         }}
         preload="auto"
         muted
+        autoPlay="true"
       />
     </div>
   );
