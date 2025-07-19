@@ -23,7 +23,7 @@ const ScrollVideo = () => {
   }, []);
 
   return (
-    <div style={{ position: "relative" }}>
+    <div style={{ position: "relative", height: "200vh" }}>
       <p
         style={{
           position: "absolute",
@@ -40,7 +40,13 @@ const ScrollVideo = () => {
       <video
         ref={videoRef}
         src="/videos/seq.mp4"
-        style={{ width: "100%", height: "auto" }}
+        style={{
+          width: "100%",
+          height: "100vh",
+          objectFit: "cover",
+          position: "sticky",
+          top: 0,
+        }}
         preload="auto"
         muted
       />
