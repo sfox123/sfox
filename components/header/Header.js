@@ -108,18 +108,9 @@ const Header = (props) => {
                       </Link>
                     </li>
                     <li>
-                      <a
-                        className="nav-link"
-                        activeClass="active"
-                        to="/components"
-                        href="/components"
-                        spy={true}
-                        smooth={true}
-                        duration={500}
-                        offset={-95}
-                      >
+                      <NavLink href="/components" className="nav-link">
                         Components
-                      </a>
+                      </NavLink>
                     </li>
                   </ul>
                 </div>
