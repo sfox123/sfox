@@ -1,6 +1,7 @@
 import pimg1 from "/public/images/project/w1.png";
 import pimg2 from "/public/images/project/w2.png";
 import pimg3 from "/public/images/project/w3.png";
+import pimg4 from "/public/images/project/w4.png";
 
 import ps1img1 from "/public/images/project-single/1.jpg";
 
@@ -52,6 +53,21 @@ const Projects = [
     link: "www.svbdriving.ca",
     description:
       "Canada’s one of the best driving schools earned a reputation for responsible and caring driving education. With our Friendly local driving experts instructors, you will enjoy a relaxed, positive and encouraging environment as you start driving lessons and learn driving.",
+  },
+  {
+    Id: "4",
+    pImg: pimg4,
+    ps1img: ps1img1,
+    psub1img1: psub1img1,
+    psub1img2: psub1img2,
+    title: "Ayaan Tours LK",
+    address: "32c/2 new Mosque Road Udathalawinna Madige Kandy",
+    subTitle: "Web Design",
+    client: "ayaan",
+    tech: ["Next.js"],
+    link: "www.ayaantours.com",
+    description:
+      "Ayaan Tours is your premier travel partner in Sri Lanka, offering unforgettable journeys and personalized experiences. With a focus on customer satisfaction and attention to detail, we ensure that every trip is a memorable one.",
   },
 ];
 

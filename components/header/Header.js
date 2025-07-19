@@ -107,6 +107,20 @@ const Header = (props) => {
                         Contact
                       </Link>
                     </li>
+                    <li>
+                      <a
+                        className="nav-link"
+                        activeClass="active"
+                        to="/components"
+                        href="/components"
+                        spy={true}
+                        smooth={true}
+                        duration={500}
+                        offset={-95}
+                      >
+                        Components
+                      </a>
+                    </li>
                   </ul>
                 </div>
               </div>
