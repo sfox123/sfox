@@ -1,30 +1,43 @@
 import React, { useEffect, useRef } from "react";
 
 const ScrollVideo = () => {
+  const containerRef = useRef(null);
   const videoRef = useRef(null);
 
   useEffect(() => {
+    const container = containerRef.current;
     const video = videoRef.current;
-    if (!video) return;
+    if (!container || !video) return;
+
     const handleScroll = () => {
-      const rect = video.getBoundingClientRect();
-      const windowHeight =
-        window.innerHeight || document.documentElement.clientHeight;
+      const rect = container.getBoundingClientRect();
+      const windowHeight = window.innerHeight || document.documentElement.clientHeight;
       const scrollTop = window.scrollY || window.pageYOffset;
       const offsetTop = rect.top + scrollTop;
-      const totalScroll = rect.height + windowHeight;
-      const scrollPos = scrollTop + windowHeight - offsetTop;
-      const progress = Math.min(Math.max(scrollPos / totalScroll, 0), 1);
+      const maxScroll = rect.height - windowHeight;
+      const progress = Math.min(Math.max((scrollTop - offsetTop) / maxScroll, 0), 1);
+
       if (video.duration) {
         video.currentTime = progress * video.duration;
       }
     };
+
+    const handleLoaded = () => {
+      video.pause();
+      handleScroll();
+    };
+
+    video.addEventListener("loadedmetadata", handleLoaded);
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+
+    return () => {
+      video.removeEventListener("loadedmetadata", handleLoaded);
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
   return (
-    <div style={{ position: "relative", height: "200vh" }}>
+    <div ref={containerRef} style={{ position: "relative", height: "200vh" }}>
       <p
         style={{
           position: "absolute",
@@ -50,7 +63,6 @@ const ScrollVideo = () => {
         }}
         preload="auto"
         muted
-        autoPlay="true"
       />
     </div>
   );
