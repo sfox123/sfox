@@ -1,7 +1,7 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState } from "react";
 
 const ContactForm = () => {
-  const form = useRef();
+
   const [forms, setForms] = useState({
     name: "",
     email: "",
@@ -10,34 +10,11 @@ const ContactForm = () => {
     message: "",
   });
 
-  // State for submission status, validation errors, and script loading
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submissionMessage, setSubmissionMessage] = useState("");
   const [errors, setErrors] = useState({});
-  const [isScriptLoaded, setIsScriptLoaded] = useState(false);
 
-  // --- Dynamically Load EmailJS Script ---
-  // This approach avoids the Next.js dynamic import error by loading the script
-  // on the client-side after the component mounts.
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.src =
-      "https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js";
-    script.async = true;
-    script.onload = () => {
-      // The script is now available on the window object
-      console.log("EmailJS script loaded.");
-      setIsScriptLoaded(true);
-    };
-    document.body.appendChild(script);
-
-    // Cleanup function to remove the script when the component unmounts
-    return () => {
-      document.body.removeChild(script);
-    };
-  }, []); // Empty dependency array ensures this runs only once on mount
-
-  // --- Simple Validation Logic ---
+  // --- Simple Validation Logic (Unchanged) ---
   const validate = () => {
     let tempErrors = {};
     let isValid = true;
@@ -70,62 +47,58 @@ const ContactForm = () => {
     setForms({ ...forms, [e.target.name]: e.target.value });
   };
 
-  const submitHandler = (e) => {
+  const submitHandler = async (e) => {
     e.preventDefault();
-
-    // Ensure the script is loaded before trying to send
-    if (!isScriptLoaded) {
-      setSubmissionMessage(
-        "Form is not ready yet. Please wait a moment and try again."
-      );
-      return;
-    }
 
     if (validate()) {
       setIsSubmitting(true);
-      setSubmissionMessage(""); // Clear previous messages
+      setSubmissionMessage("");
 
-      // These IDs come from your EmailJS account
-      const serviceID = "service_3m8noel";
-      const templateID = "template_xuihfxz"; // This is the template for the email you receive
-      const publicKey = "WvcRXgDdqlSUn7eIL";
-
-      // Use window.emailjs since the script is loaded globally
-      window.emailjs
-        .sendForm(serviceID, templateID, form.current, publicKey)
-        .then(
-          (result) => {
-            console.log("SUCCESS!", result.text);
-            setForms({
-              name: "",
-              email: "",
-              subject: "",
-              phone: "",
-              message: "",
-            });
-            setSubmissionMessage(
-              "Message sent successfully! I'll get back to you soon."
-            );
-            setIsSubmitting(false);
+      try {
+        // --- NEW: Send data to your internal Next.js API ---
+        const response = await fetch("/api/send", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
           },
-          (error) => {
-            console.log("FAILED...", error.text);
-            setSubmissionMessage(
-              "Failed to send message. Please try again later."
-            );
-            setIsSubmitting(false);
-          }
+          body: JSON.stringify(forms),
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+          throw new Error(result.error?.message || "Failed to send message");
+        }
+
+        // --- Success Handling ---
+        console.log("SUCCESS!", result);
+        setForms({
+          name: "",
+          email: "",
+          subject: "",
+          phone: "",
+          message: "",
+        });
+        setSubmissionMessage(
+          "Message sent successfully! I'll get back to you soon."
         );
+      } catch (error) {
+        // --- Error Handling ---
+        console.error("FAILED...", error);
+        setSubmissionMessage(
+          "Failed to send message. Please try again later."
+        );
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
 
   return (
     <form
-      ref={form}
-      method="post"
       className="contact-validation-active"
       onSubmit={submitHandler}
-      noValidate // prevent default browser validation
+      noValidate
     >
       <div className="row align-items-center">
         <div className="col-md-6 col-12">
@@ -205,7 +178,7 @@ const ContactForm = () => {
             <button
               type="submit"
               className="theme-btn"
-              disabled={isSubmitting || !isScriptLoaded}
+              disabled={isSubmitting}
             >
               {isSubmitting ? "Sending..." : "Submit Now"}
             </button>
